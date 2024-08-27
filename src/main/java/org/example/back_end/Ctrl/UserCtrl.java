@@ -1,5 +1,6 @@
 package org.example.back_end.Ctrl;
 
+import org.example.back_end.RequestData.UserRegisterReq;
 import org.example.back_end.RequestData.UserReq;
 import org.example.back_end.ResponseData.UserRes;
 import org.example.back_end.Services.UserService;
@@ -35,5 +36,65 @@ public class UserCtrl {
         }
 
         return userService.validateUserOTPLogin(userReq);
+    }
+
+    @PostMapping("/register")
+    public String registerAndGetBase32SecretKey(@RequestBody UserRegisterReq userRegisterReq){
+        // Check if accountName is blank
+        if (StringUtils.isBlank(userRegisterReq.getAccountName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account name is required");
+        }
+
+        // Check if password is blank
+        if (StringUtils.isBlank(userRegisterReq.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
+        }
+
+        // Check if firstName is blank
+        if (StringUtils.isBlank(userRegisterReq.getFirstName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name is required");
+        }
+
+        // Check if lastName is blank
+        if (StringUtils.isBlank(userRegisterReq.getLastName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Last name is required");
+        }
+
+        return userService.validateUserRegisterAndGetSecretKey(userRegisterReq);
+    }
+
+    @PostMapping("/register-otp")
+    public UserRes registerOTP(@RequestBody UserRegisterReq userRegisterReq){
+        // Check if accountName is blank
+        if (StringUtils.isBlank(userRegisterReq.getAccountName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account name is required");
+        }
+
+        // Check if password is blank
+        if (StringUtils.isBlank(userRegisterReq.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
+        }
+
+        // Check if firstName is blank
+        if (StringUtils.isBlank(userRegisterReq.getFirstName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name is required");
+        }
+
+        // Check if lastName is blank
+        if (StringUtils.isBlank(userRegisterReq.getLastName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Last name is required");
+        }
+
+        // Check if base32SecretKey is blank
+        if (StringUtils.isBlank(userRegisterReq.getBase32SecretKey())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Base32 secret key is required");
+        }
+
+        // Check if otp is null
+        if (userRegisterReq.getOtp() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "OTP is required");
+        }
+
+        return userService.validateOTPAndRegister(userRegisterReq);
     }
 }

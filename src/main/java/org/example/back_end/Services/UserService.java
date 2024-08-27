@@ -1,6 +1,7 @@
 package org.example.back_end.Services;
 
 import org.example.back_end.Entity.User;
+import org.example.back_end.RequestData.UserRegisterReq;
 import org.example.back_end.RequestData.UserReq;
 import org.example.back_end.ResponseData.UserRes;
 import org.example.back_end.Utils.KeyService;
@@ -88,6 +89,34 @@ public class UserService {
         userRes.fromUser(user);
         userRes.setJwt(tokenService.generateToken(user));
 
+        return userRes;
+    }
+
+    @Transactional(readOnly = true)
+    public String validateUserRegisterAndGetSecretKey(UserRegisterReq userRegisterReq){
+        LOGGER.info("User register: {}", userRegisterReq);
+        // validate existed user
+        User user = this.getUserByAccountName(userRegisterReq.getAccountName());
+        if (user != null){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User existed");
+        }
+
+        return otpService.generateBase32SecretKey();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public UserRes validateOTPAndRegister(UserRegisterReq userRegisterReq){
+        LOGGER.info("Validate OTP {} and register", userRegisterReq.getOtp());
+        if (!otpService.verifyOTP(userRegisterReq.getBase32SecretKey(), userRegisterReq.getOtp())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid otp");
+        }
+
+        User user = new User();
+        user.fromNewOne(userRegisterReq, keyService.hashPassword(userRegisterReq.getPassword()));
+        userRepo.saveAndFlush(user);
+
+        UserRes userRes = new UserRes();
+        userRes.fromUser(user);
         return userRes;
     }
 }

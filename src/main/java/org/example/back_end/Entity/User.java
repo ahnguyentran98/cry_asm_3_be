@@ -3,6 +3,9 @@ package org.example.back_end.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.back_end.RequestData.UserRegisterReq;
+import org.example.back_end.constants.UserRole;
+import org.example.back_end.constants.UserSecurityLabel;
 
 import java.util.List;
 
@@ -21,18 +24,26 @@ public class User {
 
     private String lastName;
 
-    private String role;
+    private String role = UserRole.USER.getRole();
 
     private String password;
 
-    private boolean isLocked;
+    private boolean isLocked = false;
 
-    private Integer failLogin;
+    private Integer failLogin = 0;
 
     private String otpSecret;
 
-    private String label;
+    private String label = UserSecurityLabel.UNCLASSIFIED.getLabel();
 
     @OneToMany(mappedBy = "user")
     private List<News> news;
+
+    public void fromNewOne(UserRegisterReq req, String hashPassword){
+        this.accountName = req.getAccountName();
+        this.firstName = req.getFirstName();
+        this.lastName = req.getLastName();
+        this.otpSecret = req.getBase32SecretKey();
+        this.password = hashPassword;
+    }
 }

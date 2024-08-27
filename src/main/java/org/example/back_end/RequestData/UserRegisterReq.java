@@ -1,16 +1,18 @@
 package org.example.back_end.RequestData;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
-public class UserReq {
+@ToString
+public class UserRegisterReq {
     private String accountName;
 
     @ToString.Exclude
     private String password;
 
-    private int otp;
+    private String firstName;
+    private String lastName;
+    private String base32SecretKey;
+    private Integer otp;
 }

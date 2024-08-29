@@ -22,10 +22,14 @@ public class TokenService {
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder().setClaims(claims).setSubject(user.getUserName()).setIssuedAt(new Date(System.currentTimeMillis()))
+        claims.put("roles", user.getRole());
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getUserName())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .claim("roles", user.getRole())
-                .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
     public Date extractExpirationDate(String token) {

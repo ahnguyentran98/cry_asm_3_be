@@ -12,5 +12,5 @@ public class UserReq {
     @ToString.Exclude
     private String password;
 
-    private int otp;
+    private Integer otp;
 }

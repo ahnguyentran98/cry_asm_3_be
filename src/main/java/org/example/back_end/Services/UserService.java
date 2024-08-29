@@ -44,7 +44,7 @@ public class UserService {
         LOGGER.info("Get user by userName {}", userName);
         List<User> userByUserName = userRepo.getUserByUserName(userName);
         if (userByUserName.isEmpty()) {
-            LOGGER.error("user name is not existed");
+            LOGGER.info("user name is not existed");
             return null;
         }
 
@@ -75,7 +75,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User");
         }
 
-        if (!keyService.checkPassword(user.getPassword(), user.getPassword())){
+        if (!keyService.checkPassword(userReq.getPassword(), user.getPassword())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
         }
 
@@ -85,7 +85,7 @@ public class UserService {
 
         UserRes userRes = new UserRes();
         userRes.fromUser(user);
-
+        LOGGER.info("User login username {} verified", user.getUserName());
         return userRes;
     }
 
@@ -104,7 +104,7 @@ public class UserService {
         UserRes userRes = new UserRes();
         userRes.fromUser(user);
         userRes.setJwt(tokenService.generateToken(user));
-
+        LOGGER.info("User {} login success", user.getId());
         return userRes;
     }
 
@@ -131,6 +131,7 @@ public class UserService {
         user.fromNewOne(userRegisterReq, keyService.hashPassword(userRegisterReq.getPassword()));
         userRepo.saveAndFlush(user);
 
+        LOGGER.info("register success");
         UserRes userRes = new UserRes();
         userRes.fromUser(user);
         return userRes;
@@ -148,5 +149,6 @@ public class UserService {
 
         user.setLabel(userSecurityLabel.getLabel());
         userRepo.saveAndFlush(user);
+        LOGGER.info("Update user {} labe {} success", user.getId(), user.getLabel());
     }
 }

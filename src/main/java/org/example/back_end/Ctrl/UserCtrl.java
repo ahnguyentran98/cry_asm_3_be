@@ -32,8 +32,14 @@ public class UserCtrl {
 
     @PostMapping("/login-otp")
     public UserRes loginOTP(@RequestBody UserReq userReq){
-        if (StringUtils.isBlank(userReq.getUserName()) || StringUtils.isBlank(userReq.getPassword())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request data");
+        if (StringUtils.isBlank(userReq.getUserName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty username");
+        }
+        if (StringUtils.isBlank(userReq.getPassword())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty password");
+        }
+        if (userReq.getOtp() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty otp code");
         }
 
         return userService.validateUserOTPLogin(userReq);

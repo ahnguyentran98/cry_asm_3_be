@@ -19,7 +19,7 @@ public class UserSecurityDetails implements UserDetails {
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public UserSecurityDetails(User userInfo) {
-        name = userInfo.getAccountName();
+        name = userInfo.getUserName();
         password = userInfo.getPassword();
         // add "ROLE_" prefix for spring authority handle
         authorities.add(new SimpleGrantedAuthority("ROLE_" + userInfo.getRole()));

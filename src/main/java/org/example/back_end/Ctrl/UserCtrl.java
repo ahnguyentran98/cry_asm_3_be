@@ -23,7 +23,7 @@ public class UserCtrl {
 
     @PostMapping("/login")
     public UserRes login(@RequestBody UserReq userReq){
-        if (StringUtils.isBlank(userReq.getAccountName()) || StringUtils.isBlank(userReq.getPassword())){
+        if (StringUtils.isBlank(userReq.getUserName()) || StringUtils.isBlank(userReq.getPassword())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request data");
         }
 
@@ -32,7 +32,7 @@ public class UserCtrl {
 
     @PostMapping("/login-otp")
     public UserRes loginOTP(@RequestBody UserReq userReq){
-        if (StringUtils.isBlank(userReq.getAccountName()) || StringUtils.isBlank(userReq.getPassword())){
+        if (StringUtils.isBlank(userReq.getUserName()) || StringUtils.isBlank(userReq.getPassword())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request data");
         }
 
@@ -41,8 +41,8 @@ public class UserCtrl {
 
     @PostMapping("/register")
     public String registerAndGetBase32SecretKey(@RequestBody UserRegisterReq userRegisterReq){
-        // Check if accountName is blank
-        if (StringUtils.isBlank(userRegisterReq.getAccountName())) {
+        // Check if userName is blank
+        if (StringUtils.isBlank(userRegisterReq.getUserName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account name is required");
         }
 
@@ -66,8 +66,8 @@ public class UserCtrl {
 
     @PostMapping("/register-otp")
     public UserRes registerOTP(@RequestBody UserRegisterReq userRegisterReq){
-        // Check if accountName is blank
-        if (StringUtils.isBlank(userRegisterReq.getAccountName())) {
+        // Check if userName is blank
+        if (StringUtils.isBlank(userRegisterReq.getUserName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account name is required");
         }
 
@@ -101,8 +101,8 @@ public class UserCtrl {
 
     @PostMapping("/label")
     public void updateUserLabel(@RequestBody UserLabelReq req){
-        if(StringUtils.isBlank(req.getAccountName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty account name");
+        if(StringUtils.isBlank(req.getUserName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty user name");
         }
 
         if(StringUtils.isBlank(req.getLabel())){

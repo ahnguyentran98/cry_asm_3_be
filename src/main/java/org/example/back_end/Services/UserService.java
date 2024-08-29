@@ -40,20 +40,20 @@ public class UserService {
     private SecurityLevelService securityLevelService;
 
     @Transactional(readOnly = true)
-    public User getUserByAccountName(String accountName){
-        LOGGER.info("Get user by accountName {}", accountName);
-        List<User> usersByAccountName = userRepo.getUserByAccountName(accountName);
-        if (usersByAccountName.isEmpty()) {
-            LOGGER.error("accountName is not existed");
+    public User getUserByUserName(String userName){
+        LOGGER.info("Get user by userName {}", userName);
+        List<User> userByUserName = userRepo.getUserByUserName(userName);
+        if (userByUserName.isEmpty()) {
+            LOGGER.error("user name is not existed");
             return null;
         }
 
-        if (usersByAccountName.size() > 1) {
-            LOGGER.error("Have {} account with same accountName {}", usersByAccountName.size(), accountName);
+        if (userByUserName.size() > 1) {
+            LOGGER.error("Have {} account with same user name {}", userByUserName.size(), userName);
             return null;
         }
 
-        return usersByAccountName.get(0);
+        return userByUserName.get(0);
     }
 
     @Transactional(readOnly = true)
@@ -70,7 +70,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserRes validateUserLogin(UserReq userReq){
         LOGGER.info("Validate user login {}", userReq);
-        User user = this.getUserByAccountName(userReq.getAccountName());
+        User user = this.getUserByUserName(userReq.getUserName());
         if (user == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User");
         }
@@ -92,7 +92,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserRes validateUserOTPLogin(UserReq userReq){
         LOGGER.info("Validate user otp {}", userReq);
-        User user = this.getUserByAccountName(userReq.getAccountName());
+        User user = this.getUserByUserName(userReq.getUserName());
         if (user == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User");
         }
@@ -112,7 +112,7 @@ public class UserService {
     public String validateUserRegisterAndGetSecretKey(UserRegisterReq userRegisterReq){
         LOGGER.info("User register: {}", userRegisterReq);
         // validate existed user
-        User user = this.getUserByAccountName(userRegisterReq.getAccountName());
+        User user = this.getUserByUserName(userRegisterReq.getUserName());
         if (user != null){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User existed");
         }
@@ -139,7 +139,7 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public void updateUserLabel(UserLabelReq userLabelReq){
         LOGGER.info("Update user label: {}", userLabelReq);
-        User user = this.getUserByAccountName(userLabelReq.getAccountName());
+        User user = this.getUserByUserName(userLabelReq.getUserName());
         if (user == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user");
         }

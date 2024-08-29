@@ -7,8 +7,6 @@ import org.example.back_end.RequestData.UserRegisterReq;
 import org.example.back_end.constants.UserRole;
 import org.example.back_end.constants.UserSecurityLabel;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @Entity
@@ -18,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String accountName;
+    private String userName;
 
     private String firstName;
 
@@ -37,7 +35,7 @@ public class User {
     private String label = UserSecurityLabel.UNCLASSIFIED.getLabel();
 
     public void fromNewOne(UserRegisterReq req, String hashPassword){
-        this.accountName = req.getAccountName();
+        this.userName = req.getUserName();
         this.firstName = req.getFirstName();
         this.lastName = req.getLastName();
         this.otpSecret = req.getBase32SecretKey();

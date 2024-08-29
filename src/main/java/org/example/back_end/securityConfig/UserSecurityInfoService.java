@@ -17,10 +17,10 @@ public class UserSecurityInfoService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
-        User userInfo = userService.getUserByAccountName(accountName);
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User userInfo = userService.getUserByUserName(userName);
         if (userInfo == null){
-            throw new UsernameNotFoundException("User not found with accountName: " + accountName);
+            throw new UsernameNotFoundException("User not found with user name: " + userName);
         }
         return new UserSecurityDetails(userInfo);
     }

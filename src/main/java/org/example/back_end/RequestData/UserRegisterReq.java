@@ -6,7 +6,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UserRegisterReq {
-    private String accountName;
+    private String userName;
 
     @ToString.Exclude
     private String password;

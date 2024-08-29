@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 public class UserReq {
-    private String accountName;
+    private String userName;
 
     @ToString.Exclude
     private String password;

@@ -10,7 +10,7 @@ import org.example.back_end.Entity.User;
 @ToString
 public class UserRes {
     private Long id;
-    private String accountName;
+    private String userName;
     private String firstName;
     private String lastName;
     private String role;
@@ -19,7 +19,7 @@ public class UserRes {
 
     public void fromUser(User user){
         this.id = user.getId();
-        this.accountName = user.getAccountName();
+        this.userName = user.getUserName();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.role = user.getRole();

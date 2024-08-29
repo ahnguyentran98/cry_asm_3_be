@@ -16,7 +16,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     private String accountName;
 
@@ -35,9 +35,6 @@ public class User {
     private String otpSecret;
 
     private String label = UserSecurityLabel.UNCLASSIFIED.getLabel();
-
-    @OneToMany(mappedBy = "user")
-    private List<News> news;
 
     public void fromNewOne(UserRegisterReq req, String hashPassword){
         this.accountName = req.getAccountName();

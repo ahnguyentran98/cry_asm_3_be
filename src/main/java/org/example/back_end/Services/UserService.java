@@ -1,11 +1,13 @@
 package org.example.back_end.Services;
 
 import org.example.back_end.Entity.User;
+import org.example.back_end.RequestData.UserLabelReq;
 import org.example.back_end.RequestData.UserRegisterReq;
 import org.example.back_end.RequestData.UserReq;
 import org.example.back_end.ResponseData.UserRes;
 import org.example.back_end.Utils.KeyService;
 import org.example.back_end.Utils.OTPService;
+import org.example.back_end.constants.UserSecurityLabel;
 import org.example.back_end.repositories.UserRepo;
 import org.example.back_end.securityConfig.TokenService;
 import org.slf4j.Logger;
@@ -34,6 +36,9 @@ public class UserService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private SecurityLevelService securityLevelService;
+
     @Transactional(readOnly = true)
     public User getUserByAccountName(String accountName){
         LOGGER.info("Get user by accountName {}", accountName);
@@ -49,6 +54,17 @@ public class UserService {
         }
 
         return usersByAccountName.get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserById(Long userId){
+        LOGGER.info("Get user by id {}", userId);
+        User user = userRepo.getUserById(userId);
+        if (user == null){
+            LOGGER.info("User not found with id {}", userId);
+            return null;
+        }
+        return user;
     }
 
     @Transactional(readOnly = true)
@@ -118,5 +134,19 @@ public class UserService {
         UserRes userRes = new UserRes();
         userRes.fromUser(user);
         return userRes;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUserLabel(UserLabelReq userLabelReq){
+        LOGGER.info("Update user label: {}", userLabelReq);
+        User user = this.getUserByAccountName(userLabelReq.getAccountName());
+        if (user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user");
+        }
+
+        UserSecurityLabel userSecurityLabel = securityLevelService.getLevel(userLabelReq.getLabel());
+
+        user.setLabel(userSecurityLabel.getLabel());
+        userRepo.saveAndFlush(user);
     }
 }

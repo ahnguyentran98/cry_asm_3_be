@@ -3,6 +3,8 @@ package org.example.back_end.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.back_end.ResponseData.NewsDTO;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -12,7 +14,7 @@ public class News {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn
@@ -22,5 +24,5 @@ public class News {
 
     private LocalDateTime date;
 
-    private int label;
+    private String label;
 }

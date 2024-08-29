@@ -35,12 +35,14 @@ public class SecurityConfig {
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/user/login",
-                                "/api/user/sign-up")
+                                "/api/user/login-otp",
+                                "/api/user/register",
+                                "/api/user/register-otp")
                         .permitAll()
-                        .requestMatchers("/api/user-plan/update-user-plan-monthly")
+                        .requestMatchers("/api/user/label")
                         .hasRole(UserRole.ADMIN.getRole())
-                        .requestMatchers("/api/user/information/{userId}")
-                        .hasAnyRole(UserRole.USER.getRole())
+                        .requestMatchers("/api/news/{user-id}")
+                        .hasAnyRole(UserRole.USER.getRole(), UserRole.ADMIN.getRole())
                         .anyRequest().authenticated())
                 .exceptionHandling()
                 .accessDeniedHandler(new AppAccessDeniedHandler())

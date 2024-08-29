@@ -1,5 +1,6 @@
 package org.example.back_end.Ctrl;
 
+import org.example.back_end.RequestData.UserLabelReq;
 import org.example.back_end.RequestData.UserRegisterReq;
 import org.example.back_end.RequestData.UserReq;
 import org.example.back_end.ResponseData.UserRes;
@@ -96,5 +97,18 @@ public class UserCtrl {
         }
 
         return userService.validateOTPAndRegister(userRegisterReq);
+    }
+
+    @PostMapping("/label")
+    public void updateUserLabel(@RequestBody UserLabelReq req){
+        if(StringUtils.isBlank(req.getAccountName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty account name");
+        }
+
+        if(StringUtils.isBlank(req.getLabel())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty label");
+        }
+
+        userService.updateUserLabel(req);
     }
 }

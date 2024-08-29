@@ -9,7 +9,7 @@ import org.example.back_end.Entity.User;
 @Setter
 @ToString
 public class UserRes {
-    private String id;
+    private Long id;
     private String accountName;
     private String firstName;
     private String lastName;

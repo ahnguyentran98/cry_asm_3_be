@@ -54,7 +54,7 @@ public class NewsService {
         }
 
         if(!securityLevelService.checkLevelForWriteMessage(newsDTO.getLabel(), user.getLabel())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User now authorize to write news for this level");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not authorize to write news for this level");
         }
 
         News news = new News();

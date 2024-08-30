@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/user/label")
                         .hasRole(UserRole.ADMIN.getRole())
-                        .requestMatchers("/api/news/{user-id}")
+                        .requestMatchers("/api/news/**")
                         .hasAnyRole(UserRole.USER.getRole(), UserRole.ADMIN.getRole())
                         .anyRequest().authenticated())
                 .exceptionHandling()
@@ -60,7 +60,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Adjust to your frontend's origin
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "x-auth-token"));
         configuration.setAllowCredentials(true); // If you need to include cookies or authorization headers
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

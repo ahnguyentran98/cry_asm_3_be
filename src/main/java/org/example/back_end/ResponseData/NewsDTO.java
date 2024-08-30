@@ -22,6 +22,9 @@ public class NewsDTO {
 
     private String label;
 
+    public NewsDTO() {
+    }
+
     public NewsDTO(News news){
         this.id = news.getId();
         this.user = news.getUser();

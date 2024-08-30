@@ -149,6 +149,6 @@ public class UserService {
 
         user.setLabel(userSecurityLabel.getLabel());
         userRepo.saveAndFlush(user);
-        LOGGER.info("Update user {} labe {} success", user.getId(), user.getLabel());
+        LOGGER.info("Update user {} label {} success", user.getId(), user.getLabel());
     }
 }

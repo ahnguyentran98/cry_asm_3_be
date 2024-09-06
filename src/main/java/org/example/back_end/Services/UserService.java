@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,6 +39,9 @@ public class UserService {
 
     @Autowired
     private SecurityLevelService securityLevelService;
+
+    @Autowired
+    private LoginFailHandleService loginFailHandleService;
 
     @Transactional(readOnly = true)
     public User getUserByUserName(String userName){
@@ -89,15 +93,18 @@ public class UserService {
         return userRes;
     }
 
-    @Transactional(readOnly = true)
-    public UserRes validateUserOTPLogin(UserReq userReq){
+
+    @Transactional(rollbackFor = Exception.class)
+    public UserRes validateUserOTPLogin(UserReq userReq) {
         LOGGER.info("Validate user otp {}", userReq);
         User user = this.getUserByUserName(userReq.getUserName());
-        if (user == null){
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User");
         }
 
-        if(!otpService.verifyOTP(user.getOtpSecret(), userReq.getOtp())){
+        if (!otpService.verifyOTP(user.getOtpSecret(), userReq.getOtp())) {
+            loginFailHandleService.handleFailedLogin(user);
+            LOGGER.info("Wrong OTP of user {}, fail login + 1", userReq.getUserName());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid OTP");
         }
 

@@ -35,9 +35,6 @@ public class UserCtrl {
         if (StringUtils.isBlank(userReq.getUserName())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty username");
         }
-        if (StringUtils.isBlank(userReq.getPassword())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty password");
-        }
         if (userReq.getOtp() == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Empty otp code");
         }

@@ -15,7 +15,7 @@ public class LoginFailHandleService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleFailedLogin(User user) {
         int failLogin = user.getFailLogin() + 1;
-        if (failLogin >= 3) {
+        if (failLogin > 5) {
             user.setLocked(true);
         }
         user.setFailLogin(failLogin);

@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/error","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/user/login",
                                 "/api/user/login-otp",
                                 "/api/user/register",

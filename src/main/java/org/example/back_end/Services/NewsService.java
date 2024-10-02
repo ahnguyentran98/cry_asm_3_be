@@ -7,6 +7,8 @@ import org.example.back_end.repositories.NewsRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,6 +30,7 @@ public class NewsService {
     @Autowired
     private UserService userService;
 
+    @Cacheable(value = "newsCache", key = "#userId")
     public List<NewsDTO> getNews(Long userId){
         LOGGER.info("Get news for user {}", userId);
         User user = userService.getUserById(userId);
@@ -43,9 +46,11 @@ public class NewsService {
 
         List<NewsDTO> result = new ArrayList<>();
         news.forEach(message -> result.add(new NewsDTO(message)));
+        LOGGER.info("News for user {}: {}", userId, result);
         return result;
     }
 
+    @CacheEvict(value = "newsCache", key = "#userId")
     public void writeNews(Long userId, NewsDTO newsDTO){
         LOGGER.info("Write news {} for user {}", newsDTO ,userId);
         User user = userService.getUserById(userId);
